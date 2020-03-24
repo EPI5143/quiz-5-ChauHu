@@ -64,7 +64,7 @@ run;
 *In=a for IDs from spine; 
 *Setting missing diabetes codes to 0; 
 data final;
-	merge encounters_(in=a) diabetes_(in=b rename=(hdghraencwid=hraencwid));
+	merge abstract(in=a) diabetes_(in=b rename=(hdghraencwid=hraencwid));
 	by hraencwid;
 	if a;
 	if dm=. then dm=0;
