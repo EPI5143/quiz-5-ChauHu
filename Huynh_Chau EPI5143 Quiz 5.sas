@@ -3,6 +3,7 @@ libname classdat "C:\EPI5143 Course Material\datasets";
 libname ex "C:\EPI5143 Course Material\EPI5143 exercise"; 
 
 /******** Question 1 ***********/
+*Dates between 2003-2004;
 data abstract; 
 set classdat.nhrabstracts; 
 if 2003 <= year(datepart(hraAdmDtm))<= 2004 then output;
@@ -35,19 +36,19 @@ tables dm count;
 run;
 
 %macro skip; 
-data diabetes;
-set classdat.nhrdiagnosis;
-dm=0;
-if hdgcd in:('250' 'E10' 'E11') 
-then dm=1; 
-run;
+	data diabetes;
+	set classdat.nhrdiagnosis;
+	dm=0;
+	if hdgcd in:('250' 'E10' 'E11') 
+	then dm=1; 
+	run;
 
-proc means data=diabetes_ noprint;
-class hdghraencwid;
-types hdghraencwid; 
-var dm;
-output out=diabetes_ max(dm)=dm n(dm)=count sum(dm)=dm_count;
-run;
+	proc means data=diabetes_ noprint;
+	class hdghraencwid;
+	types hdghraencwid; 
+	var dm;
+	output out=diabetes_ max(dm)=dm n(dm)=count sum(dm)=dm_count;
+	run;
 %mend skip; 
 
 
@@ -60,6 +61,8 @@ by hdghraencwid;
 run;
 
 /******** Question 4 ***********/
+*In=a for IDs from spine; 
+*Setting missing diabetes codes to 0; 
 data final;
 	merge encounters_(in=a) diabetes_(in=b rename=(hdghraencwid=hraencwid));
 	by hraencwid;
@@ -69,6 +72,8 @@ data final;
 	if dm_count=. then dm_count=0;
 run;
 
+/******** Question 5 ***********/
+/******** # observations matches spine dataset ***********/ 
 proc freq data=final;
 tables dm count;
 run;
